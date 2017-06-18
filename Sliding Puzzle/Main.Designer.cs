@@ -36,6 +36,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtTime = new System.Windows.Forms.TextBox();
             this.timerUpdateLabel = new System.Windows.Forms.Timer(this.components);
+            this.btnHighScores = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pic00)).BeginInit();
             this.pnlBackboard.SuspendLayout();
             this.SuspendLayout();
@@ -65,7 +66,8 @@
             this.btnNewGame.Location = new System.Drawing.Point(613, 440);
             this.btnNewGame.Name = "btnNewGame";
             this.btnNewGame.Size = new System.Drawing.Size(114, 50);
-            this.btnNewGame.TabIndex = 1;
+            this.btnNewGame.TabIndex = 2;
+            this.btnNewGame.TabStop = false;
             this.btnNewGame.Text = "New Game";
             this.btnNewGame.UseVisualStyleBackColor = true;
             this.btnNewGame.Click += new System.EventHandler(this.btnNewGame_Click);
@@ -77,6 +79,7 @@
             this.btnRestartGame.Name = "btnRestartGame";
             this.btnRestartGame.Size = new System.Drawing.Size(114, 50);
             this.btnRestartGame.TabIndex = 1;
+            this.btnRestartGame.TabStop = false;
             this.btnRestartGame.Text = "Restart";
             this.btnRestartGame.UseVisualStyleBackColor = true;
             this.btnRestartGame.Click += new System.EventHandler(this.btnRestartGame_Click);
@@ -101,6 +104,7 @@
             this.txtTime.ReadOnly = true;
             this.txtTime.Size = new System.Drawing.Size(100, 26);
             this.txtTime.TabIndex = 3;
+            this.txtTime.TabStop = false;
             this.txtTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // timerUpdateLabel
@@ -108,12 +112,25 @@
             this.timerUpdateLabel.Interval = 1000;
             this.timerUpdateLabel.Tick += new System.EventHandler(this.timerUpdateLabel_Tick);
             // 
+            // btnHighScores
+            // 
+            this.btnHighScores.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
+            this.btnHighScores.Location = new System.Drawing.Point(613, 50);
+            this.btnHighScores.Name = "btnHighScores";
+            this.btnHighScores.Size = new System.Drawing.Size(114, 50);
+            this.btnHighScores.TabIndex = 0;
+            this.btnHighScores.TabStop = false;
+            this.btnHighScores.Text = "High Scores";
+            this.btnHighScores.UseVisualStyleBackColor = true;
+            this.btnHighScores.Click += new System.EventHandler(this.btnHighScores_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(739, 567);
+            this.Controls.Add(this.btnHighScores);
             this.Controls.Add(this.txtTime);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnRestartGame);
@@ -139,6 +156,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Timer timerUpdateLabel;
         private System.Windows.Forms.TextBox txtTime;
+        private System.Windows.Forms.Button btnHighScores;
     }
 }
 
