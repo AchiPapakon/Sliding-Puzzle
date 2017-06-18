@@ -8,11 +8,16 @@ namespace Sliding_Puzzle
 {
     public partial class frmMain : Form
     {
-        static byte backboardSize = 4;
-        static byte pixels = 2;
-        static byte tileWidth;
+        static int backboardSize = 4;
+        static int pixels = 2;
+        static int tileWidth;
         static System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
         static bool isClickable = true;
+
+        public static int GetSize()
+        {
+            return backboardSize;
+        }
 
         // Create the pictureBoxes:
         static Tile[,] tiles = new Tile[backboardSize, backboardSize];
@@ -62,11 +67,11 @@ namespace Sliding_Puzzle
         {
             manageTimer(state);
             
-            tileWidth = (byte)((pnlBackboard.Width - pixels * (backboardSize + 1)) / backboardSize); ;
+            tileWidth = (int)((pnlBackboard.Width - pixels * (backboardSize + 1)) / backboardSize); ;
 
-            for (byte i = 0; i < backboardSize; i++) // Rows:
+            for (int i = 0; i < backboardSize; i++) // Rows:
             {
-                for (byte j = 0; j < backboardSize; j++) // Columns:
+                for (int j = 0; j < backboardSize; j++) // Columns:
                 {
                     if (state == gameState.NewGame || state == gameState.Restart)
                     {
@@ -91,9 +96,9 @@ namespace Sliding_Puzzle
 
         private static void setNeighbours(Tile[,] in_tiles)
         {
-            for (byte i = 0; i < backboardSize; i++) // Rows:
+            for (int i = 0; i < backboardSize; i++) // Rows:
             {
-                for (byte j = 0; j < backboardSize; j++) // Columns:
+                for (int j = 0; j < backboardSize; j++) // Columns:
                 {
                     in_tiles[i, j].Neighbour = false;
                     try

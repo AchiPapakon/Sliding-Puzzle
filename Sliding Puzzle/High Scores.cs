@@ -178,7 +178,7 @@ namespace Sliding_Puzzle
             doc.LoadXml("<HighScores></HighScores>");
 
             XmlElement highScoreCount = doc.CreateElement("HighScoreRecords");
-            highScoreCount.SetAttribute("count", "5"); // The '5' value is decorative.
+            highScoreCount.SetAttribute("size", frmMain.GetSize().ToString());
             doc.DocumentElement.AppendChild(highScoreCount);
 
             for (int i = 0; i < records.playersList.Count; i++)
