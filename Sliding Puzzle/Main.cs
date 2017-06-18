@@ -1,29 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Sliding_Puzzle
 {
     public partial class frmMain : Form
     {
-        // I think I've got wrong the i, j positions...
-        static byte backboardSize = 2;
+        // I think I've got wrong the i, j positions.
+        static byte backboardSize = 10;
         static byte pixels = 2;
         static byte tileWidth;
         static System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+        static bool isClickable = true;
 
         // Create the pictureBoxes:
         static Tile[,] tiles = new Tile[backboardSize, backboardSize];
         // With the `tilesSimpleArray` I just want to create a simple List that will have the
         // references pointing to the original `Tile tiles` line above.
-        static List<Tile> tilesSimpleList = new List<Tile>();
         
         public frmMain()
         {
@@ -71,7 +66,6 @@ namespace Sliding_Puzzle
 
         private void createGame(gameState state)
         {
-            tilesSimpleList.Clear();
             manageTimer(state);
             
             tileWidth = (byte)((pnlBackboard.Width - pixels * (backboardSize + 1)) / backboardSize); ;
@@ -87,7 +81,6 @@ namespace Sliding_Puzzle
                     int locationLeft = pixels + i * (pixels + tileWidth);
                     int locationTop = pixels + j * (pixels + tileWidth);
                     tiles[i, j] = new Tile(locationLeft, locationTop, i, j, this);
-                    tilesSimpleList.Add(tiles[i, j]);
                     pnlBackboard.Controls.Add(tiles[i, j].GetPicture());
                 }
             }
@@ -157,6 +150,7 @@ namespace Sliding_Puzzle
                 if (state == gameState.NewGame)
                 {
                     shuffledList = Enumerable.Range(0, frmMain.backboardSize * frmMain.backboardSize).Shuffle().ToList();
+
                 }
                 else if (state == gameState.Restart)
                 {
@@ -205,7 +199,7 @@ namespace Sliding_Puzzle
 
             private void swap(object sender, EventArgs e)
             {
-                if (isNeighbour) // The swap works only in the 4-neighbourhood
+                if (isClickable && isNeighbour) // The swap works only in the 4-neighbourhood
                 {
                     // Can I do a simple swap of the objects instead of changing all of their properties?
                     tiles[hidden.X, hidden.Y].GetPicture().Visible = true; // Unhide
@@ -238,24 +232,16 @@ namespace Sliding_Puzzle
                         }
                         if (won)
                         {
-                            foreach (Tile tile in tilesSimpleList)
-                            {
-                                tile.GetPicture().Click -= new EventHandler(swap);
-                            }
-                            
-                            /*
-                            for (int i = 0; i < backboardSize; i++)
-                            {
-                                for (int j = 0; j < backboardSize; j++)
-                                {
-                                    tiles[i, j].GetPicture().Click -= swap; // failed here with i, j
-                                }
-                            }
-                            */
+                            isClickable = false;
+                            frm.btnRestartGame.Enabled = false;
 
                             frm.manageTimer(gameState.End);
                             string text = "You have won the match!\n\nTime: " + frm.txtTime.Text;
                             MessageBox.Show(text, "Congratulations!");
+
+                            frmHighScores HighScores = new frmHighScores();
+                            HighScores.records.PotentialTime = frm.txtTime.Text;
+                            HighScores.ShowDialog();
                         }
                     }
                 }
@@ -303,6 +289,8 @@ namespace Sliding_Puzzle
 
         private void btnNewGame_Click(object sender, EventArgs e)
         {
+            isClickable = true;
+            btnRestartGame.Enabled = true;
             Tile.ResetStaticVariables(gameState.NewGame);
             createGame(gameState.NewGame);
         }
@@ -316,9 +304,7 @@ namespace Sliding_Puzzle
         private void timerUpdateLabel_Tick(object sender, EventArgs e)
         {
             // Update every second:
-            //string labelText = stopwatch.Elapsed.Hours + ":" + stopwatch.Elapsed.Minutes
-            //    + ":" + stopwatch.Elapsed.Seconds;
-
+            // Using Math.Round because I don't want to skip 1 second or add 1 extra second.
             double seconds = Math.Round(stopwatch.ElapsedMilliseconds / 1000.0);
             double minutes = Math.Floor(seconds / 60);
             seconds %= 60;
@@ -329,6 +315,12 @@ namespace Sliding_Puzzle
             text += (minutes < 10) ? ":0" + minutes.ToString() : ":" + minutes.ToString();
             text += (seconds < 10) ? ":0" + seconds.ToString() : ":" + seconds.ToString();
             txtTime.Text = text;
+        }
+
+        private void btnHighScores_Click(object sender, EventArgs e)
+        {
+            frmHighScores highScores = new frmHighScores();
+            highScores.ShowDialog();
         }
     }
 }
