@@ -9,7 +9,7 @@ namespace Sliding_Puzzle
     public partial class frmMain : Form
     {
         // I think I've got wrong the i, j positions.
-        static byte backboardSize = 10;
+        static byte backboardSize = 4;
         static byte pixels = 2;
         static byte tileWidth;
         static System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
