@@ -25,7 +25,11 @@ namespace Sliding_Puzzle
             if (matchedText != txtPlayerName.Text)
             {
                 MessageBox.Show("Please only use valid characters");
-                txtPlayerName.Text = txtPlayerName.Text.Remove(txtPlayerName.Text.Length - 1);
+
+                // Remove the invalid characters (if more than one via copy-paste):
+                txtPlayerName.Text = m.Value;
+                //txtPlayerName.Text = txtPlayerName.Text.Remove(txtPlayerName.Text.Length - 1);
+                txtPlayerName.SelectionStart = txtPlayerName.TextLength;
             }
         }
 
@@ -34,6 +38,7 @@ namespace Sliding_Puzzle
             if (string.IsNullOrWhiteSpace(txtPlayerName.Text))
             {
                 MessageBox.Show("Please enter a proper name");
+                txtPlayerName.Text = "";
             }
             else
             {

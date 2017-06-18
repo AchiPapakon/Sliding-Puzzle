@@ -8,7 +8,6 @@ namespace Sliding_Puzzle
 {
     public partial class frmMain : Form
     {
-        // I think I've got wrong the i, j positions.
         static byte backboardSize = 4;
         static byte pixels = 2;
         static byte tileWidth;
@@ -25,11 +24,6 @@ namespace Sliding_Puzzle
             InitializeComponent();
             
             createGame(gameState.InitialGame);
-        }
-
-        public string asd()
-        {
-            return txtTime.Text;
         }
 
         enum gameState
@@ -78,8 +72,8 @@ namespace Sliding_Puzzle
                     {
                         pnlBackboard.Controls.Remove(tiles[i, j].GetPicture());
                     }
-                    int locationLeft = pixels + i * (pixels + tileWidth);
-                    int locationTop = pixels + j * (pixels + tileWidth);
+                    int locationLeft = pixels + j * (pixels + tileWidth);
+                    int locationTop = pixels + i * (pixels + tileWidth);
                     tiles[i, j] = new Tile(locationLeft, locationTop, i, j, this);
                     pnlBackboard.Controls.Add(tiles[i, j].GetPicture());
                 }
@@ -215,7 +209,7 @@ namespace Sliding_Puzzle
                     {
                         for (int j = 0; j < backboardSize; j++)
                         {
-                            currentSequence.Add(Convert.ToInt32(tiles[j, i].GetPicture().Tag)); // failed here with i, j
+                            currentSequence.Add(Convert.ToInt32(tiles[i, j].GetPicture().Tag));
                         }
                     }
 
@@ -239,9 +233,9 @@ namespace Sliding_Puzzle
                             string text = "You have won the match!\n\nTime: " + frm.txtTime.Text;
                             MessageBox.Show(text, "Congratulations!");
 
-                            frmHighScores HighScores = new frmHighScores();
-                            HighScores.records.PotentialTime = frm.txtTime.Text;
-                            HighScores.ShowDialog();
+                            frmHighScores highScores = new frmHighScores();
+                            highScores.records.PotentialTime = frm.txtTime.Text;
+                            highScores.ShowDialog();
                         }
                     }
                 }

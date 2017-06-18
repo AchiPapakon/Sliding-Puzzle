@@ -12,6 +12,8 @@ namespace Sliding_Puzzle
         public frmHighScores()
         {
             InitializeComponent();
+
+            gridHighScores.BackgroundColor = this.BackColor;
         }
 
         private void High_Scores_Load(object sender, EventArgs e)
@@ -231,6 +233,9 @@ namespace Sliding_Puzzle
                 var source = new BindingSource();
                 source.DataSource = items;
                 gridHighScores.DataSource = source;
+
+                if (gridHighScores.RowCount !=0)
+                    gridHighScores.Rows[0].Cells[0].Selected = false;
             }
             catch (Exception e)
             {
