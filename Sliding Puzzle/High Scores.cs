@@ -18,7 +18,7 @@ namespace Sliding_Puzzle
         private string txtTimeText;
         List<DataGridView> gridArray = new List<DataGridView>();
 
-        public frmHighScores(int in_backboardSize)
+        public frmHighScores(int in_backboardSize) : this()
         {
             this.backboardSize = in_backboardSize;
         }

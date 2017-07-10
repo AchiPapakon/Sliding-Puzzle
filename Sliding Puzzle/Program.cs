@@ -16,7 +16,9 @@ namespace Sliding_Puzzle
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmMain());
+            //Application.Run(new frmMain()); // Replacing this line with new frmMain().Show(); and Application.Run();
+            new frmMain().Show();
+            Application.Run();
         }
     }
 }
