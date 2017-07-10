@@ -9,25 +9,69 @@ namespace Sliding_Puzzle
 {
     public partial class frmHighScores : Form
     {
+        private int highScoreEntries = 5;
+        private int backboardDifferentSizes = 6;
+        // How can I do some proper unit testing for this class (frmHighScores)?
+        //private int backboardSize = 5; // test
+        private int backboardSize;
+        //private string txtTimeText = "00:00:04"; // test
+        private string txtTimeText;
+        List<DataGridView> gridArray = new List<DataGridView>();
+
+        public frmHighScores(int in_backboardSize)
+        {
+            this.backboardSize = in_backboardSize;
+        }
+
+        public frmHighScores(int in_backboardSize, string in_txtTimeText) : this(in_backboardSize)
+        {
+            this.txtTimeText = in_txtTimeText;
+        }
+
         public frmHighScores()
         {
             InitializeComponent();
+            
+            for (int i = 0; i < backboardDifferentSizes; i++)
+            {
+                int num = i + 2;
+                string elementName = "grid" + num + "x" + num;
+                //gridArray.Add(this.Controls.Find(elementName, true));
 
-            gridHighScores.BackgroundColor = this.BackColor;
+                // getElementById:
+                gridArray.Add(this.Controls.Find(elementName, true).FirstOrDefault() as DataGridView);
+                records.Add(new Records());
+
+                //TextBox tbx = this.Controls.Find("textBox1", true).FirstOrDefault() as TextBox;
+                //tbx.Text = "found!";
+
+                //Control[] tbxs = this.Controls.Find(txtbox_and_message[0, 0], true);
+                //if (tbxs != null && tbxs.Length > 0)
+                //{
+                //    tbxs[0].Text = "Found!";
+                //}
+            }
+
+            foreach (var item in gridArray)
+            {
+                item.BackgroundColor = this.BackColor;
+            }
+            //grid2x2.BackgroundColor = this.BackColor; // cleanup before merge
         }
 
         private void High_Scores_Load(object sender, EventArgs e)
         {
-            if (records.PotentialTime != null)
+            Records.PotentialTime = txtTimeText;
+            if (Records.PotentialTime != null /*redundant ?*/) 
             {
-                int timeInSeconds = timeToMilliseconds(records.PotentialTime);
+                int timeInSeconds = timeToMilliseconds(Records.PotentialTime);
                 if (readHighScores()) // false if the data.xml doesn't exist
                 {
-                    searchHighScoresAndReplace(timeInSeconds, records.playersList, records.timeList);
+                    searchHighScoresAndReplace(timeInSeconds, records[backboardSize-2].playersList, records[backboardSize-2].timeList);
                 }
                 else
                 {
-                    justAddHighScore(timeInSeconds, records.playersList, records.timeList);
+                    justAddHighScore(timeInSeconds, records[backboardSize-2].playersList, records[backboardSize-2].timeList);
                 }
 
                 saveXML();
@@ -42,23 +86,22 @@ namespace Sliding_Puzzle
 
         string xmlPath = System.IO.Path.Combine(Environment.CurrentDirectory, "data.xml");
 
-        public Records records = new Records();
+        private List<Records> records = new List<Records>(); // 3 + 3 = 6. Ignore 0 and 1, so 6+2=8
 
-        public class Records
+        private class Records
         {
+            public static string PotentialTime { get; set; }
+            public static string NewPlayerName { get; set; }
             public List<string> playersList = new List<string>();
             public List<int> timeList = new List<int>();
-            public string PotentialTime { get; set; }
-            public string NewPlayerName { get; set; }
-            
+
+            // Can I destroy all the instances of PotentionTime and NewPlayerName?
             public void Clear()
             {
                 playersList.Clear();
                 timeList.Clear();
             }
         }
-
-        int highScoreEntries = 5;
 
         private bool searchHighScoresAndReplace(int m_timeInSeconds, List<string> m_playersList, List<int> m_timeList)
         {
@@ -118,14 +161,29 @@ namespace Sliding_Puzzle
 
             try
             {
-                foreach (XmlNode record in doc.DocumentElement.ChildNodes[0].ChildNodes)
+                foreach (XmlElement item in doc.DocumentElement.ChildNodes)
                 {
-                    records.playersList.Add(record.Attributes["playername"].Value);
-                    records.timeList.Add(timeToMilliseconds(record.Attributes["time"].Value));
+                    //item.GetAttribute("size");
+                    //MessageBox.Show(item.GetAttribute("size"));
+                    int size = Convert.ToInt32(item.GetAttribute("size"));
+
+                    foreach (XmlElement record in item.ChildNodes)
+                    {
+                        // Fix: This can be done using constructor!
+                        records[size - 2].playersList.Add(record.Attributes["playername"].Value);
+                        records[size - 2].timeList.Add(timeToMilliseconds(record.Attributes["time"].Value));
+                    }
                 }
+
+                //foreach (XmlNode record in doc.DocumentElement.ChildNodes[0].ChildNodes)
+                //{
+                //    records.playersList.Add(record.Attributes["playername"].Value);
+                //    records.timeList.Add(timeToMilliseconds(record.Attributes["time"].Value));
+                //}
             }
-            catch //(Exception)
+            catch (Exception e)
             {
+                //MessageBox.Show(e.ToString());
                 // Corrupted data in the xml file.
                 System.IO.File.Delete(xmlPath);
                 records.Clear();
@@ -133,19 +191,22 @@ namespace Sliding_Puzzle
             }
 
             // Robustness:
-            var playersListCount = records.playersList.Count;
-            if (playersListCount < highScoreEntries)
+            foreach (var item in records)
             {
-                for (int i = playersListCount; i < highScoreEntries; i++)
+                var playersListCount = item.playersList.Count;
+                if (playersListCount < highScoreEntries)
                 {
-                    records.playersList.Add(null);
-                    records.timeList.Add(-1);
+                    for (int i = playersListCount; i < highScoreEntries; i++)
+                    {
+                        item.playersList.Add(null);
+                        item.timeList.Add(-1);
+                    }
                 }
-            }
-            else if (playersListCount > highScoreEntries)
-            {
-                records.playersList.RemoveRange(highScoreEntries, playersListCount - highScoreEntries);
-                records.timeList.RemoveRange(highScoreEntries, playersListCount - highScoreEntries);
+                else if (playersListCount > highScoreEntries)
+                {
+                    item.playersList.RemoveRange(highScoreEntries, playersListCount - highScoreEntries);
+                    item.timeList.RemoveRange(highScoreEntries, playersListCount - highScoreEntries);
+                }
             }
             return true;
         }
@@ -177,18 +238,21 @@ namespace Sliding_Puzzle
             XmlDocument doc = new XmlDocument();
             doc.LoadXml("<HighScores></HighScores>");
 
-            XmlElement highScoreCount = doc.CreateElement("HighScoreRecords");
-            highScoreCount.SetAttribute("size", frmMain.GetSize().ToString());
-            doc.DocumentElement.AppendChild(highScoreCount);
-
-            for (int i = 0; i < records.playersList.Count; i++)
+            for (int i = 0; i < records.Count; i++)
             {
-                if (records.playersList[i] != null)
+                XmlElement highScoreCount = doc.CreateElement("HighScoreRecords");
+                highScoreCount.SetAttribute("size", (i + 2).ToString());
+                doc.DocumentElement.AppendChild(highScoreCount);
+
+                for (int j = 0; j < records[i].playersList.Count; j++)
                 {
-                    XmlElement element = doc.CreateElement("Record");
-                    element.SetAttribute("playername", records.playersList[i]);
-                    element.SetAttribute("time", millisecondsToTime(records.timeList[i]));
-                    doc.DocumentElement.ChildNodes[0].AppendChild(element);
+                    if (records[i].playersList[j] != null)
+                    {
+                        XmlElement element = doc.CreateElement("Record");
+                        element.SetAttribute("playername", records[i].playersList[j]);
+                        element.SetAttribute("time", millisecondsToTime(records[i].timeList[j]));
+                        doc.DocumentElement.ChildNodes[i].AppendChild(element);
+                    }
                 }
             }
 
@@ -215,31 +279,40 @@ namespace Sliding_Puzzle
 
         private void populateList()
         {
-            // I have created an empty list called 'items' which is the data source.
-            var items = new[] { new { Player = "one", Time = "ONE" } }.ToList();
-            items.Remove(items[0]);
-
-            try
+            for (int i = 0; i < backboardDifferentSizes; i++)
             {
-                for (int i = 0; i < records.playersList.Count; i++)
+                // I have created an empty list called 'items' which is the data source.
+                var items = new[] { new { Player = "one", Time = "ONE" } }.ToList();
+                items.Remove(items[0]); // Now it's empty!
+
+                try
                 {
-                    if (records.playersList[i] == null)
+                    if (records.Count != 0) // (if the High Scores have just been reset)
                     {
-                        break;
+                        for (int j = 0; j < records[i].playersList.Count; j++)
+                        {
+                            if (records[i].playersList[j] == null)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                items.Add(new { Player = records[i].playersList[j], Time = millisecondsToTime(records[i].timeList[j]) });
+                            }
+                        }
                     }
-                    items.Add(new { Player = records.playersList[i], Time = millisecondsToTime(records.timeList[i]) });
+
+                    var source = new BindingSource();
+                    source.DataSource = items;
+                    gridArray[i].DataSource = source;
+
+                    if (gridArray[i].RowCount != 0)
+                        gridArray[i].Rows[0].Cells[0].Selected = false;
                 }
-
-                var source = new BindingSource();
-                source.DataSource = items;
-                gridHighScores.DataSource = source;
-
-                if (gridHighScores.RowCount !=0)
-                    gridHighScores.Rows[0].Cells[0].Selected = false;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.ToString());
+                }
             }
         }
 
@@ -248,7 +321,7 @@ namespace Sliding_Puzzle
             System.IO.File.Delete(xmlPath);
             records.Clear();
             populateList();
-            //gridHighScores.Refresh();
+            //grid2x2.Refresh();
         }
     }
 }

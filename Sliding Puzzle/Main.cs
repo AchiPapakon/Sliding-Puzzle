@@ -238,8 +238,8 @@ namespace Sliding_Puzzle
                             string text = "You have won the match!\n\nTime: " + frm.txtTime.Text;
                             MessageBox.Show(text, "Congratulations!");
 
-                            frmHighScores highScores = new frmHighScores();
-                            highScores.records.PotentialTime = frm.txtTime.Text;
+                            frmHighScores highScores = new frmHighScores(backboardSize, frm.txtTime.Text);
+                            //highScores.records.PotentialTime = frm.txtTime.Text;
                             highScores.ShowDialog();
                         }
                     }
