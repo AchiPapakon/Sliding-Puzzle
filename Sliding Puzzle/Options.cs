@@ -36,11 +36,6 @@ namespace Sliding_Puzzle
             }
         }
 
-        private void frmOptions_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void frmOptions_FormClosed(object sender, FormClosedEventArgs e)
         {
             int pos = 2;
@@ -53,7 +48,10 @@ namespace Sliding_Puzzle
                 }
                 pos++;
             }
-            this.DialogResult = DialogResult.OK;
+            if (pos != backboardSize)
+            {
+                this.DialogResult = DialogResult.OK;
+            }
         }
     }
 }

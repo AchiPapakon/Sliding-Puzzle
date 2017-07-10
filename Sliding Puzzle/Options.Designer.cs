@@ -129,7 +129,6 @@
             this.Name = "frmOptions";
             this.Text = "Options";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmOptions_FormClosed);
-            this.Load += new System.EventHandler(this.frmOptions_Load);
             this.grpBoardSize.ResumeLayout(false);
             this.grpBoardSize.PerformLayout();
             this.ResumeLayout(false);

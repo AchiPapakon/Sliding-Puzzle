@@ -338,7 +338,10 @@ namespace Sliding_Puzzle
             frmOptions options = new frmOptions(backboardSize);
             if (options.ShowDialog() == DialogResult.OK)
             {
-                new frmMain(options.newSize).Show();
+                frmMain newBoard = new frmMain(options.newSize);
+                newBoard.StartPosition = FormStartPosition.Manual;
+                newBoard.Location = this.Location;
+                newBoard.Show();
                 this.Close();
             }
         }
