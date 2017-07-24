@@ -13,6 +13,7 @@ namespace Sliding_Puzzle
         static int tileWidth;
         static System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
         static bool isClickable = true;
+        static int maxSize = 7;
 
         public static int GetSize()
         {
@@ -20,15 +21,20 @@ namespace Sliding_Puzzle
         }
 
         // Create the pictureBoxes:
-        static Tile[,] tiles = new Tile[backboardSize, backboardSize];
+        static Tile[,] tiles = new Tile[maxSize, maxSize]; // The maximum thing.
         // With the `tilesSimpleArray` I just want to create a simple List that will have the
         // references pointing to the original `Tile tiles` line above.
+        
+        public frmMain(int in_backboardSize) : this()
+        {
+            backboardSize = in_backboardSize;
+            Tile.ResetStaticVariables(gameState.NewGame);
+            manageTimer(gameState.NewGame);
+        }
         
         public frmMain()
         {
             InitializeComponent();
-            
-            createGame(gameState.InitialGame);
         }
 
         enum gameState
@@ -238,8 +244,8 @@ namespace Sliding_Puzzle
                             string text = "You have won the match!\n\nTime: " + frm.txtTime.Text;
                             MessageBox.Show(text, "Congratulations!");
 
-                            frmHighScores highScores = new frmHighScores();
-                            highScores.records.PotentialTime = frm.txtTime.Text;
+                            frmHighScores highScores = new frmHighScores(backboardSize, frm.txtTime.Text);
+                            //highScores.records.PotentialTime = frm.txtTime.Text;
                             highScores.ShowDialog();
                         }
                     }
@@ -288,6 +294,11 @@ namespace Sliding_Puzzle
 
         private void btnNewGame_Click(object sender, EventArgs e)
         {
+            btnNewGameClickEvent();
+        }
+
+        private void btnNewGameClickEvent()
+        {
             isClickable = true;
             btnRestartGame.Enabled = true;
             Tile.ResetStaticVariables(gameState.NewGame);
@@ -320,6 +331,32 @@ namespace Sliding_Puzzle
         {
             frmHighScores highScores = new frmHighScores();
             highScores.ShowDialog();
+        }
+
+        private void btnOptions_Click(object sender, EventArgs e)
+        {
+            frmOptions options = new frmOptions(backboardSize);
+            if (options.ShowDialog() == DialogResult.OK)
+            {
+                frmMain newBoard = new frmMain(options.newSize);
+                newBoard.StartPosition = FormStartPosition.Manual;
+                newBoard.Location = this.Location;
+                newBoard.Show();
+                this.Close();
+            }
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            createGame(gameState.InitialGame);
+        }
+
+        private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (Application.OpenForms.Count == 0)
+            {
+                Application.Exit();
+            }
         }
     }
 }

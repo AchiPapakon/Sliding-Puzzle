@@ -65,6 +65,12 @@
     <Compile Include="High Scores.Designer.cs">
       <DependentUpon>High Scores.cs</DependentUpon>
     </Compile>
+    <Compile Include="Options.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Options.Designer.cs">
+      <DependentUpon>Options.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="EnterPlayerName.resx">
@@ -75,6 +81,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="High Scores.resx">
       <DependentUpon>High Scores.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Options.resx">
+      <DependentUpon>Options.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

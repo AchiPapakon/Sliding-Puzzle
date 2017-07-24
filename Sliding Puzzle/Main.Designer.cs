@@ -37,6 +37,7 @@
             this.txtTime = new System.Windows.Forms.TextBox();
             this.timerUpdateLabel = new System.Windows.Forms.Timer(this.components);
             this.btnHighScores = new System.Windows.Forms.Button();
+            this.btnOptions = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pic00)).BeginInit();
             this.pnlBackboard.SuspendLayout();
             this.SuspendLayout();
@@ -124,12 +125,25 @@
             this.btnHighScores.UseVisualStyleBackColor = true;
             this.btnHighScores.Click += new System.EventHandler(this.btnHighScores_Click);
             // 
+            // btnOptions
+            // 
+            this.btnOptions.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(161)));
+            this.btnOptions.Location = new System.Drawing.Point(613, 117);
+            this.btnOptions.Name = "btnOptions";
+            this.btnOptions.Size = new System.Drawing.Size(114, 50);
+            this.btnOptions.TabIndex = 4;
+            this.btnOptions.TabStop = false;
+            this.btnOptions.Text = "Options";
+            this.btnOptions.UseVisualStyleBackColor = true;
+            this.btnOptions.Click += new System.EventHandler(this.btnOptions_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(739, 567);
+            this.Controls.Add(this.btnOptions);
             this.Controls.Add(this.btnHighScores);
             this.Controls.Add(this.txtTime);
             this.Controls.Add(this.label1);
@@ -140,6 +154,8 @@
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.Text = "Sliding Puzzle";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMain_FormClosed);
+            this.Load += new System.EventHandler(this.frmMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pic00)).EndInit();
             this.pnlBackboard.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -157,6 +173,7 @@
         private System.Windows.Forms.Timer timerUpdateLabel;
         private System.Windows.Forms.TextBox txtTime;
         private System.Windows.Forms.Button btnHighScores;
+        private System.Windows.Forms.Button btnOptions;
     }
 }
 
